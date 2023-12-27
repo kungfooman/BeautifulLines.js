@@ -2,8 +2,7 @@
   "name": "instanced-lines-2",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "tsc && vite build",
+    "build": "echo build-free pleasure",
     "serve": "vite preview"
   },
   "files": [
@@ -18,9 +17,7 @@
     }
   },
   "devDependencies": {
-    "@types/url-parse": "^1.4.4",
-    "typescript": "^4.3.2",
-    "vite": "^2.6.0"
+    "@types/url-parse": "^1.4.4"
   },
   "dependencies": {
     "gl-matrix": "^3.3.0",
