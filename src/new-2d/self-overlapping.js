@@ -1,21 +1,22 @@
-import { mat4 } from "gl-matrix";
-import REGL, { DrawCommand } from "regl";
-
-import { interleavedStripCommand, interleavedStripTerminalCommand } from "./interleaved-strip";
-import { miterJoinCommand } from "./miter-join";
-import { bevelJoinCommand } from "./bevel-join";
-import { roundJoinCommand } from "./round-join";
-import { capCommand, roundCapGeometry, squareCapGeometry } from "./caps";
-
+import {mat4} from "gl-matrix";
+import REGL, {DrawCommand} from "regl";
+import {interleavedStripCommand, interleavedStripTerminalCommand} from "./interleaved-strip.js";
+import {miterJoinCommand } from "./miter-join.js";
+import {bevelJoinCommand } from "./bevel-join.js";
+import {roundJoinCommand } from "./round-join.js";
+import {capCommand, roundCapGeometry, squareCapGeometry} from "./caps.js";
 export function selfOverlapping() {
   const regl = REGL({ extensions: ["ANGLE_instanced_arrays"] });
   const canvas = document.getElementsByTagName("canvas")[0];
   canvas.classList.add("grid");
-
   const projection = mat4.ortho(mat4.create(), -canvas.width / 2, canvas.width / 2, -canvas.height / 2, canvas.height / 2, 0, -1);
   const viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height };
-
-  function generateSamplePointsInterleaved(width: number, height: number) {
+  /**
+   * @param {number} width 
+   * @param {number} height 
+   * @returns {number[][]}
+   */
+  function generateSamplePointsInterleaved(width, height) {
     const points = [];
     for (let i = 0; i < 1000; i++) {
       const theta = i * 0.1;
@@ -24,14 +25,12 @@ export function selfOverlapping() {
     }
     return points;
   }
-
   const points = generateSamplePointsInterleaved(canvas.width, canvas.height);
-
   const hash = window.location.hash;
   const colorCoded = hash.includes("color-coded");
   const alpha = hash.includes("alpha") ? 0.75 : 1.0;
-
-  let join: DrawCommand;
+  /** @type {DrawCommand} */
+  let join;
   if (hash.includes("bevel-join")) {
     join = bevelJoinCommand(regl);
   } else if (hash.includes("miter-join")) {
@@ -39,8 +38,8 @@ export function selfOverlapping() {
   } else if (hash.includes("round-join")) {
     join = roundJoinCommand(regl, 16);
   }
-
-  let cap: DrawCommand;
+  /** @type {DrawCommand} */
+  let cap;
   if (hash.includes("round-cap")) {
     const roundCap = roundCapGeometry(16);
     cap = capCommand(regl, roundCap);
@@ -48,10 +47,8 @@ export function selfOverlapping() {
     const squareCap = squareCapGeometry();
     cap = capCommand(regl, squareCap);
   }
-
   const interleavedStrip = interleavedStripCommand(regl);
   const interleavedStripTerminal = interleavedStripTerminalCommand(regl);
-
   function loop() {
     regl.clear({ color: [0, 0, 0, 0] });
     const width = 32 * (0.5 * Math.sin(performance.now() * 0.002) + 0.5) + 4;
@@ -95,6 +92,5 @@ export function selfOverlapping() {
     }
     requestAnimationFrame(loop);
   }
-
   loop();
 }

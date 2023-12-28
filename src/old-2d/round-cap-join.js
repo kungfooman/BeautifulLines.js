@@ -1,6 +1,8 @@
-import { Regl } from "regl";
-
-function roundCapJoinGeometry(regl: Regl, resolution: number) {
+/**
+ * @param {import('regl').Regl} regl 
+ * @param {number} resolution
+ */
+function roundCapJoinGeometry(regl, resolution) {
   const instanceRoundRound = [
     [0, -0.5, 0],
     [0, -0.5, 1],
@@ -30,8 +32,11 @@ function roundCapJoinGeometry(regl: Regl, resolution: number) {
     count: instanceRoundRound.length,
   };
 }
-
-export function interleavedStripRoundCapJoin(regl: Regl, resolution: number) {
+/**
+ * @param {import('regl').Regl} regl 
+ * @param {number} resolution 
+ */
+export function interleavedStripRoundCapJoin(regl, resolution) {
   const roundCapJoin = roundCapJoinGeometry(regl, resolution);
   return regl({
     vert: `
@@ -40,7 +45,6 @@ export function interleavedStripRoundCapJoin(regl: Regl, resolution: number) {
       attribute vec2 pointA, pointB;
       uniform float width;
       uniform mat4 projection;
-  
       void main() {
         vec2 xBasis = normalize(pointB - pointA);
         vec2 yBasis = vec2(-xBasis.y, xBasis.x);
@@ -49,41 +53,36 @@ export function interleavedStripRoundCapJoin(regl: Regl, resolution: number) {
         vec2 point = mix(offsetA, offsetB, position.z);
         gl_Position = projection * vec4(point, 0, 1);
       }`,
-
     frag: `
       precision highp float;
       uniform vec4 color;
       void main() {
         gl_FragColor = color;
       }`,
-
     attributes: {
       position: {
         buffer: roundCapJoin.buffer,
         divisor: 0,
       },
       pointA: {
-        buffer: regl.prop<any, any>("points"),
+        buffer: regl.prop/*<any, any>*/("points"),
         divisor: 1,
         offset: Float32Array.BYTES_PER_ELEMENT * 0,
       },
       pointB: {
-        buffer: regl.prop<any, any>("points"),
+        buffer: regl.prop/*<any, any>*/("points"),
         divisor: 1,
         offset: Float32Array.BYTES_PER_ELEMENT * 2,
       },
     },
-
     uniforms: {
-      width: regl.prop<any, any>("width"),
-      color: regl.prop<any, any>("color"),
-      projection: regl.prop<any, any>("projection"),
+      width: regl.prop/*<any, any>*/("width"),
+      color: regl.prop/*<any, any>*/("color"),
+      projection: regl.prop/*<any, any>*/("projection"),
     },
-
     depth: {
       enable: false,
     },
-
     blend: {
       enable: true,
       func: {
@@ -91,14 +90,12 @@ export function interleavedStripRoundCapJoin(regl: Regl, resolution: number) {
         dst: "one minus src alpha",
       },
     },
-
     cull: {
       enable: true,
       face: "back",
     },
-
     count: roundCapJoin.count,
-    instances: regl.prop<any, any>("segments"),
-    viewport: regl.prop<any, any>("viewport"),
+    instances: regl.prop/*<any, any>*/("segments"),
+    viewport: regl.prop/*<any, any>*/("viewport"),
   });
 }

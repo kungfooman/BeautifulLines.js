@@ -1,15 +1,18 @@
-import { mat4 } from "gl-matrix";
-import { Regl } from "regl";
-
-import { interleavedStripCommand, interleavedStripTerminalCommand } from "./interleaved-strip";
-import { miterJoinCommand } from "./miter-join";
-import { bevelJoinCommand } from "./bevel-join";
-import { roundJoinCommand } from "./round-join";
-import { capCommand, roundCapGeometry, squareCapGeometry } from "./caps";
-
-function generateSamplePointsInterleaved(width: number, height: number) {
+import {mat4} from "gl-matrix";
+import {interleavedStripCommand, interleavedStripTerminalCommand} from "./interleaved-strip.js";
+import {miterJoinCommand} from "./miter-join.js";
+import {bevelJoinCommand} from "./bevel-join.js";
+import {roundJoinCommand} from "./round-join.js";
+import {capCommand, roundCapGeometry, squareCapGeometry} from "./caps.js";
+/**
+ * @param {number} width 
+ * @param {number} height 
+ * @returns {number[][]}
+ */
+function generateSamplePointsInterleaved(width, height) {
   const stepx = width / 9;
   const stepy = height / 10;
+  /** @type {number[][]} */
   const points = [];
   for (let x = 1; x < 9; x += 2) {
     points.push([(x + 0) * stepx - width / 2, 3 * stepy - height / 2]);
@@ -17,32 +20,31 @@ function generateSamplePointsInterleaved(width: number, height: number) {
   }
   return points;
 }
-
-export function new2d(regl: Regl) {
+/**
+ * @param {import('regl').Regl} regl 
+ */
+export function new2d(regl) {
   const bevelJoin = bevelJoinCommand(regl);
   const miterJoin = miterJoinCommand(regl);
   const roundJoin = roundJoinCommand(regl, 16);
-
   const roundCap = capCommand(regl, roundCapGeometry(16));
   const squareCap = capCommand(regl, squareCapGeometry());
-
   const interleavedStrip = interleavedStripCommand(regl);
   const interleavedStripTerminal = interleavedStripTerminalCommand(regl);
-
   const pointsBuffer = regl.buffer(0);
-
-  function render(
-    canvas: HTMLCanvasElement,
-    color: boolean,
-    join: "miter" | "bevel" | "round" | "none",
-    cap: "round" | "square" | "none",
-    terminal: boolean,
-    alpha: number
-  ) {
+  /**
+   * 
+   * @param {HTMLCanvasElement} canvas 
+   * @param {boolean} color 
+   * @param {"miter" | "bevel" | "round" | "none"} join 
+   * @param {"round" | "square" | "none"} cap 
+   * @param {boolean} terminal 
+   * @param {number} alpha 
+   */
+  function render(canvas, color, join, cap, terminal, alpha) {
     const points = generateSamplePointsInterleaved(canvas.width, canvas.height);
     const projection = mat4.ortho(mat4.create(), -canvas.width / 2, canvas.width / 2, -canvas.height / 2, canvas.height / 2, 0, -1);
     const viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height };
-
     const scaleX = 0.45 * Math.sin(performance.now() * 0.002) + 0.75;
     const scaleY = Math.sin(performance.now() * 0.0003);
     const scaledPoints = [];
@@ -107,6 +109,5 @@ export function new2d(regl: Regl) {
       });
     }
   }
-
   return render;
 }

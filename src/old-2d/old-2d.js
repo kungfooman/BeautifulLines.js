@@ -1,9 +1,12 @@
-import { mat4 } from "gl-matrix";
-import { Regl } from "regl";
-import { interleavedStripCommand } from "./interleaved-strip";
-import { interleavedStripRoundCapJoin } from "./round-cap-join";
-
-function generateSamplePointsInterleaved(width: number, height: number) {
+import {mat4                        } from "gl-matrix";
+import {interleavedStripCommand     } from "./interleaved-strip.js";
+import {interleavedStripRoundCapJoin} from "./round-cap-join.js";
+/**
+ * @param {number} width 
+ * @param {number} height 
+ * @returns {number[][]}
+ */
+function generateSamplePointsInterleaved(width, height) {
   const stepx = width / 9;
   const stepy = height / 10;
   const points = [];
@@ -13,14 +16,19 @@ function generateSamplePointsInterleaved(width: number, height: number) {
   }
   return points;
 }
-
-export function old2d(regl: Regl) {
+/**
+ * @param {import('regl').Regl} regl 
+ */
+export function old2d(regl) {
   const interleavedStrip = interleavedStripCommand(regl);
   const roundRound = interleavedStripRoundCapJoin(regl, 16);
-
   const pointsBuffer = regl.buffer(0);
-
-  function render(canvas: HTMLCanvasElement, segments: boolean, alpha: number) {
+  /**
+   * @param {HTMLCanvasElement} canvas 
+   * @param {boolean} segments 
+   * @param {number} alpha 
+   */
+  function render(canvas, segments, alpha) {
     const points = generateSamplePointsInterleaved(canvas.width, canvas.height);
     const projection = mat4.ortho(mat4.create(), -canvas.width / 2, canvas.width / 2, -canvas.height / 2, canvas.height / 2, 0, -1);
     const viewport = { x: 0, y: 0, width: canvas.width, height: canvas.height };

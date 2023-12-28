@@ -5,7 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instanced Lines Part II</title>
-    <script type="module" src="/src/main.ts"></script>
+    <script src="importmap.js"></script>
+    <script src="./node_modules/regl/dist/regl.js"></script>
+    <script type="module">
+      import * as index from "./src/main.js";
+      console.log("./src/main.js", index);
+      Object.assign(window, {index, ...index});
+    </script>
   </head>
   <style>
     .renderCanvas {
@@ -21,92 +27,37 @@
   </style>
   <body>
     <canvas id="old-no-alpha" class="renderCanvas"></canvas>
-
-    <script type="module">
-      oldStrip("old-no-alpha", false, 1.0);
-    </script>
-
     <canvas id="old-alpha" class="renderCanvas"></canvas>
-
-    <script type="module">
-      oldStrip("old-alpha", false, 0.75);
-    </script>
-
     <canvas id="new-alpha-working" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-working", false, "round", "round", true, 0.75);
-    </script>
-
     <canvas id="old-alpha-segments" class="renderCanvas"></canvas>
-
-    <script type="module">
-      oldStrip("old-alpha-segments", true, 0.75);
-    </script>
-
     <canvas id="new-alpha-color-segments" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-color-segments", true, "none", "none", false, 0.75);
-    </script>
-
     <canvas id="new-alpha-color-terminal" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-color-terminal", true, "none", "none", true, 0.75);
-    </script>
-
     <canvas id="new-alpha-color-bevel" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-color-bevel", true, "bevel", "none", true, 0.75);
-    </script>
-
     <canvas id="new-alpha-color-miter" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-color-miter", true, "miter", "none", true, 0.75);
-    </script>
-
     <canvas id="new-alpha-color-round" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-color-round", true, "round", "none", true, 0.75);
-    </script>
-
     <canvas id="new-alpha-color-round-caps" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-color-round-caps", true, "round", "round", true, 0.75);
-    </script>
-
     <canvas id="new-alpha-color-square-caps" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-alpha-color-square-caps", true, "round", "square", true, 0.75);
-    </script>
-
     <canvas id="new-round-square" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-round-square", false, "round", "square", true, 0.75);
-    </script>
-
     <canvas id="new-round-round" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-round-round", false, "round", "round", true, 0.75);
-    </script>
-
     <canvas id="new-miter-round" class="renderCanvas"></canvas>
-
-    <script type="module">
-      newStrip("new-miter-round", false, "miter", "round", true, 0.75);
-    </script>
-
     <canvas id="new-bevel-round" class="renderCanvas"></canvas>
-
+    <p></p>
     <script type="module">
+      import {oldStrip, newStrip} from "./src/main.js";
+      oldStrip("old-no-alpha", false, 1.0);
+      oldStrip("old-alpha", false, 0.75);
+      newStrip("new-alpha-working", false, "round", "round", true, 0.75);
+      oldStrip("old-alpha-segments", true, 0.75);
+      newStrip("new-alpha-color-segments", true, "none", "none", false, 0.75);
+      newStrip("new-alpha-color-terminal", true, "none", "none", true, 0.75);
+      newStrip("new-alpha-color-bevel", true, "bevel", "none", true, 0.75);
+      newStrip("new-alpha-color-miter", true, "miter", "none", true, 0.75);
+      newStrip("new-alpha-color-round", true, "round", "none", true, 0.75);
+      newStrip("new-alpha-color-round-caps", true, "round", "round", true, 0.75);
+      newStrip("new-alpha-color-square-caps", true, "round", "square", true, 0.75);
+      newStrip("new-round-square", false, "round", "square", true, 0.75);
+      newStrip("new-round-round", false, "round", "round", true, 0.75);
+      newStrip("new-miter-round", false, "miter", "round", true, 0.75);
       newStrip("new-bevel-round", false, "bevel", "round", true, 0.75);
     </script>
   </body>

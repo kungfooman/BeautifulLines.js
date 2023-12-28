@@ -1,12 +1,21 @@
-import { Regl } from "regl";
-
+/**
+ * @typedef {import('regl').DefaultContext} DefaultContext
+ */
+/**
+ * @template {DefaultContext} Context
+ * @template {{}} Props
+ * @typedef {import('regl').DrawCommand<Context, Props>} DrawCommand
+ */
 const geometry = [
   [1, 0, 0],
   [0, 1, 0],
   [0, 0, 1],
 ];
-
-export function bevelJoinCommand(regl: Regl) {
+/**
+ * @param {import('regl').Regl} regl 
+ * @returns {DrawCommand<DefaultContext, {}>}
+ */
+export function bevelJoinCommand(regl) {
   return regl({
     vert: `
     precision highp float;
@@ -14,7 +23,6 @@ export function bevelJoinCommand(regl: Regl) {
     attribute vec3 position;
     uniform float width;
     uniform mat4 projection;
-
     void main() {
       vec2 tangent = normalize(normalize(pointC - pointB) + normalize(pointB - pointA));
       vec2 normal = vec2(-tangent.y, tangent.x);
@@ -29,46 +37,41 @@ export function bevelJoinCommand(regl: Regl) {
       vec2 point = pointB + position.x * p0 + position.y * p1 + position.z * p2;
       gl_Position = projection * vec4(point, 0, 1);
     }`,
-
     frag: `
     precision highp float;
     uniform vec4 color;
     void main() {
       gl_FragColor = color;
     }`,
-
     depth: {
       enable: false,
     },
-
     attributes: {
       position: {
         buffer: regl.buffer(geometry),
         divisor: 0,
       },
       pointA: {
-        buffer: regl.prop<any, any>("points"),
+        buffer: regl.prop/*<any, any>*/("points"),
         divisor: 1,
         offset: Float32Array.BYTES_PER_ELEMENT * 0,
       },
       pointB: {
-        buffer: regl.prop<any, any>("points"),
+        buffer: regl.prop/*<any, any>*/("points"),
         divisor: 1,
         offset: Float32Array.BYTES_PER_ELEMENT * 2,
       },
       pointC: {
-        buffer: regl.prop<any, any>("points"),
+        buffer: regl.prop/*<any, any>*/("points"),
         divisor: 1,
         offset: Float32Array.BYTES_PER_ELEMENT * 4,
       },
     },
-
     uniforms: {
-      width: regl.prop<any, any>("width"),
-      color: regl.prop<any, any>("color"),
-      projection: regl.prop<any, any>("projection"),
+      width: regl.prop/*<any, any>*/("width"),
+      color: regl.prop/*<any, any>*/("color"),
+      projection: regl.prop/*<any, any>*/("projection"),
     },
-
     blend: {
       enable: true,
       func: {
@@ -76,14 +79,12 @@ export function bevelJoinCommand(regl: Regl) {
         dst: "one minus src alpha",
       },
     },
-
     cull: {
       enable: true,
       face: "back",
     },
-
     count: geometry.length,
-    instances: regl.prop<any, any>("instances"),
-    viewport: regl.prop<any, any>("viewport"),
+    instances: regl.prop/*<any, any>*/("instances"),
+    viewport: regl.prop/*<any, any>*/("viewport"),
   });
 }
