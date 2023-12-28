@@ -1,7 +1,7 @@
-import {mat4                           } from "gl-matrix";
-import {interleavedStripCommand        } from "./interleaved-strip-command.js";
-import {interleavedStripTerminalCommand} from './interleaved-strip-terminal-command.js';
-import {miterJoinCommand                               } from "./miter-join.js";
+import {mat4                                           } from "gl-matrix";
+import {interleavedStripCommand                        } from "./interleaved-strip-command.js";
+import {interleavedStripTerminalCommand                } from './interleaved-strip-terminal-command.js';
+import {miterJoinCommand                               } from "./miter-join-command.js";
 import {bevelJoinCommand                               } from "./bevel-join.js";
 import {roundJoinCommand                               } from "./round-join.js";
 import {capCommand, roundCapGeometry, squareCapGeometry} from "./caps.js";
