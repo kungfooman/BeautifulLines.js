@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>n-body line visualisation</title>
+    <script src="importmap.js"></script>
+    <script src="./node_modules/regl/dist/regl.js"></script>
+    <script type="module">
+      import * as index from "./src/n-body/index.js";
+      console.log("index", index);
+      Object.assign(window, {index, ...index});
+    </script>
+  </head>
+  <style>
+    .renderCanvas {
+      background-color: #fff;
+      background-image: linear-gradient(#eef 2px, transparent 2px), linear-gradient(90deg, #eef 2px, transparent 2px),
+        linear-gradient(#eef 1px, transparent 1px), linear-gradient(90deg, #eef 1px, #fff 1px);
+      background-size: 10px 10px, 10px 10px;
+      background-position: -1px -1px, -1px -1px;
+      width: 100%;
+      height: 150px;
+      margin-bottom: 128px;
+    }
+  </style>
+  <body>
+  </body>
+</html>
