@@ -17,7 +17,6 @@ export function interleavedStripCommand(regl) {
       attribute vec2 pointA, pointB;
       uniform float width;
       uniform mat4 projection;
-  
       void main() {
         vec2 xBasis = pointB - pointA;
         vec2 yBasis = normalize(vec2(-xBasis.y, xBasis.x));

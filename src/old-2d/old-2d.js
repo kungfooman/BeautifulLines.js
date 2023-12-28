@@ -1,6 +1,6 @@
 import {mat4                           } from 'gl-matrix';
-import {interleavedStripCommand        } from './interleaved-strip.js';
-import {interleavedStripRoundCapJoin   } from './round-cap-join.js';
+import {interleavedStripCommand        } from './interleaved-strip-command.js';
+import {interleavedStripRoundCapJoin   } from './interleaved-strip-round-cap-join.js';
 import {generateSamplePointsInterleaved} from '../generateSamplePointsInterleaved.js';
 /**
  * @param {import('regl').Regl} regl 
